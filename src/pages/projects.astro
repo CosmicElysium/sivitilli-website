@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projects } from "../data/content";
+
+const currentProjects = projects.filter((project) => project.status === "current");
+const pastProjects = projects.filter((project) => project.status === "past");
+---
+
+<BaseLayout
+  title="Projects · Alexander Sivitilli"
+  description="Current and previous projects in immersive scientific visualisation, astronomy, machine learning and digital planetariums."
+>
+  <header class="page-hero shell">
+    <p class="eyebrow">Projects</p>
+    <h1>Research made tangible.</h1>
+    <p>
+      Current work and selected previous projects spanning immersive analytics,
+      scientific software, machine learning, astronomical instrumentation and
+      astronomy education research.
+    </p>
+  </header>
+
+  <section class="section shell project-section" aria-labelledby="current-title">
+    <div class="section-heading">
+      <p class="eyebrow">Current projects</p>
+      <h2 id="current-title">Active research and development.</h2>
+    </div>
+
+    <div class="project-list">
+      {currentProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section shell project-section" aria-labelledby="past-title">
+    <div class="section-heading">
+      <p class="eyebrow">Selected previous work</p>
+      <h2 id="past-title">Completed projects that shaped the current work.</h2>
+    </div>
+
+    <div class="project-list">
+      {pastProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section shell cta-strip" aria-label="Publications">
+    <div>
+      <p class="eyebrow">Research outputs</p>
+      <h2>Looking for the papers?</h2>
+    </div>
+    <a class="button primary" href="/publications/">View publications</a>
+  </section>
+</BaseLayout>

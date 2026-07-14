@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { publications, socialLinks } from "../data/content";
+
+const years = [...new Set(publications.map((publication) => publication.year))].sort(
+  (a, b) => b - a,
+);
+
+const orcid = socialLinks.find((link) => link.label === "ORCID");
+const scholar = socialLinks.find((link) => link.label === "Google Scholar");
+---
+
+<BaseLayout
+  title="Publications · Alexander Sivitilli"
+  description="Selected publications and research outputs by Alexander Sivitilli."
+>
+  <header class="page-hero shell publications-hero">
+    <p class="eyebrow">Publications</p>
+    <h1>Selected research outputs.</h1>
+    <p>
+      Peer-reviewed articles, conference proceedings, a doctoral thesis and
+      selected conference outputs. For the most complete and current record,
+      use ORCID or Google Scholar.
+    </p>
+
+    <div class="button-row">
+      {
+        orcid && (
+          <a
+            class="button"
+            href={orcid.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ORCID
+          </a>
+        )
+      }
+      {
+        scholar && (
+          <a
+            class="button"
+            href={scholar.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Scholar
+          </a>
+        )
+      }
+    </div>
+  </header>
+
+  <div class="section shell publication-groups">
+    {
+      years.map((year) => (
+        <section class="publication-year" aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`}>{year}</h2>
+
+          <div class="publication-list">
+            {publications
+              .filter((publication) => publication.year === year)
+              .map((publication) => (
+                <article class="publication-card">
+                  <p class="publication-type">{publication.type}</p>
+                  <h3>{publication.title}</h3>
+                  <p class="publication-authors">{publication.authors}</p>
+                  <p class="publication-venue">{publication.venue}</p>
+                  {publication.note && <p>{publication.note}</p>}
+
+                  <div class="publication-links">
+                    {publication.links.map((link) => (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                </article>
+              ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
