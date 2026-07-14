@@ -196,8 +196,12 @@ img {
   }
 
   .hero-portrait {
-    max-width: 300px;
-    justify-self: start;
+    width: min(100%, 260px);
+    justify-self: center;
+  }
+
+  .headshot {
+    width: 100%;
   }
 }
 
@@ -746,7 +750,8 @@ summary {
   }
 
   .hero-portrait {
-    max-width: 34rem;
+    width: min(100%, 280px);
+    justify-self: center;
   }
 
   .research-grid {
