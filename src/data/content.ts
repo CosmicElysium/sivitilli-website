@@ -275,8 +275,8 @@ export const projects: Project[] = [
     slug: "laser-alignment-telescope",
     title: "Laser Alignment Telescope at the Large Binocular Telescope",
     status: "past",
-    period: "May 2015 - June 2016",
-    organisation: "Max Planck Institute for Astronomy",
+    period: "Master's project · May 2015 - June 2016",
+    organisation: "Max Planck Institute for Astronomy · Heidelberg University",
     mark: "LAT / LBT",
     summary:
       "A purpose-built telescope and open-source image-analysis system for automatically locating and aligning the ARGOS laser guide stars.",
@@ -296,6 +296,13 @@ export const projects: Project[] = [
     imageAlt:
       "The ARGOS laser guide stars and Laser Alignment Telescope at the Large Binocular Telescope",
     links: [
+      {
+        label: "Master's thesis",
+        type: "Thesis",
+        href: "/documents/sivitilli_masters_thesis.pdf",
+        description:
+          "The written report describing the design, construction and commissioning of the Laser Alignment Telescope and its software.",
+      },
       {
         label: "Smart Laser Alignment algorithm",
         type: "Source code",
