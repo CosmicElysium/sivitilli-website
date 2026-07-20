@@ -292,7 +292,7 @@ export const projects: Project[] = [
       "Laser guide stars",
       "Open-source software",
     ],
-    image: "/images/projects/argos.JPG",
+    image: "/images/projects/laser-alignment/argos-lasers.webp",
     imageAlt:
       "The ARGOS laser guide stars and Laser Alignment Telescope at the Large Binocular Telescope",
     links: [

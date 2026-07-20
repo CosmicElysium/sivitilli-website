@@ -1,0 +1,42 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width?: number | string;
+  height?: number | string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  loading = "lazy",
+  fetchpriority,
+} = Astro.props;
+---
+
+<div class="project-image">
+  <img
+    class="project-image__backdrop"
+    src={src}
+    alt=""
+    aria-hidden="true"
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+  />
+  <img
+    class="project-image__foreground"
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchpriority}
+  />
+</div>
