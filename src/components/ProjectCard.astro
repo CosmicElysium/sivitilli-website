@@ -43,7 +43,9 @@ const { project } = Astro.props;
     </details>
 
     {
-      project.slug === "laser-alignment-telescope" && (
+      ["laser-alignment-telescope", "digital-planetarium-learning"].includes(
+        project.slug,
+      ) && (
         <a
           class="text-link"
           href={`/projects/${project.slug}/`}

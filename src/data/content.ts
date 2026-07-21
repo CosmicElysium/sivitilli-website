@@ -251,7 +251,7 @@ export const projects: Project[] = [
       "Digital planetariums",
       "Curriculum design",
     ],
-    image: "/images/projects/mcdip.png",
+    image: "/images/projects/digital-planetarium/iziko-planetarium.webp",
     imageAlt:
       "Students taking part in an astronomy learning experience inside a digital planetarium",
     links: [
