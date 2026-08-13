@@ -7,6 +7,12 @@ interface Props {
 }
 
 const { project } = Astro.props;
+
+const DETAIL_PAGE_SLUGS = [
+  "idavie",
+  "laser-alignment-telescope",
+  "digital-planetarium-learning",
+];
 ---
 
 <article class="project-card" id={project.slug}>
@@ -28,6 +34,8 @@ const { project } = Astro.props;
       <span>{project.organisation}</span>
     </div>
 
+    <p class="project-role">{project.role}</p>
+
     <h3>{project.title}</h3>
     <p class="project-summary">{project.summary}</p>
 
@@ -43,9 +51,7 @@ const { project } = Astro.props;
     </details>
 
     {
-      ["laser-alignment-telescope", "digital-planetarium-learning"].includes(
-        project.slug,
-      ) && (
+      DETAIL_PAGE_SLUGS.includes(project.slug) && (
         <a
           class="text-link"
           href={`/projects/${project.slug}/`}

@@ -11,12 +11,24 @@ export type ResearchArea = {
   description: string;
 };
 
+// A toolkit item is either a plain claim or a claim with a link to the artefact
+// that evidences it. `evidence` names the artefact for screen-reader users.
+export type ToolkitItem =
+  | string
+  | { label: string; href: string; evidence: string };
+
+export type ToolkitGroup = {
+  title: string;
+  items: ToolkitItem[];
+};
+
 export type Project = {
   slug: string;
   title: string;
   status: "current" | "past";
   period: string;
   organisation: string;
+  role: string;
   mark: string;
   summary: string;
   details: string[];
@@ -59,98 +71,183 @@ export const socialLinks: LinkItem[] = [
   },
 ];
 
-export const currentResearch: ResearchArea[] = [
+export const whatIBuild: ResearchArea[] = [
   {
-    title: "Immersive scientific environments",
+    title: "Real-time 3D and immersive systems",
     description:
-      "I develop virtual reality, digital-dome and spatial-computing environments for exploring complex astronomical and Earth-observation data, including connected systems for collaborative analysis.",
+      "I build virtual-reality, digital-dome and spatial-computing environments in Unity: ray-marched volume rendering, custom HLSL shaders, native C++ data pipelines and the interaction systems that keep large datasets navigable at framerate.",
   },
   {
-    title: "Human-centred AI interaction",
+    title: "Human-centred design and evaluation",
     description:
-      "I investigate natural-language interfaces, AI-assisted navigation and human-in-the-loop workflows that keep researchers actively involved in interpreting data and steering scientific systems.",
+      "My doctorate is mixed-methods user research on immersive learning. I run the studies that separate real analytical benefit from novelty, then feed the findings back into the system I built.",
   },
   {
-    title: "Planetary science and machine learning",
+    title: "Machine learning for scientific data",
     description:
-      "I develop and validate neural-network methods for identifying asteroid families, while using immersive visualisation to inspect real and synthetic training data and model behaviour.",
+      "I design and validate neural networks for asteroid-family identification, and build immersive diagnostics that render model confidence directly in orbital-element space, surfacing disagreements that 2D plots obscure.",
+  },
+];
+
+// Mirrors the Technical Skills section of the CV. The CV is the fact source:
+// nothing appears here that is not claimed there. Where a claim has a public
+// artefact behind it, the item links to that artefact.
+const IDAVIE_REPO = "https://github.com/idia-astro/iDaVIE/";
+const IDAVIE_PAPER = "https://doi.org/10.1016/j.ascom.2026.101109";
+const IDAVIE_ZENODO = "https://doi.org/10.5281/zenodo.13752029";
+const FITS2IDIA_REPO = "https://github.com/CARTAvis/fits2idia";
+const PERC_PAPER = "https://doi.org/10.1119/perc.2023.pr.Sivitilli";
+// Persistent handle; resolves to the OpenUCT record linked elsewhere on the site.
+const THESIS = "https://hdl.handle.net/11427/40358";
+
+export const toolkit: ToolkitGroup[] = [
+  {
+    title: "Real-time 3D & XR",
+    items: [
+      {
+        label: "Unity",
+        href: IDAVIE_REPO,
+        evidence: "the iDaVIE source on GitHub",
+      },
+      "C#",
+      "OpenXR / SteamVR",
+      "HLSL and Cg shaders",
+      {
+        label: "Volumetric ray-marching",
+        href: IDAVIE_PAPER,
+        evidence: "the iDaVIE v1.0 paper in Astronomy and Computing",
+      },
+      {
+        label: "Mipmapping and level-of-detail",
+        href: FITS2IDIA_REPO,
+        evidence: "fits2idia on GitHub",
+      },
+      "Particle rendering",
+      "VR interaction design",
+      "Multi-user immersive environments",
+      "Digital dome and fulldome pipelines",
+      "Blender",
+    ],
+  },
+  {
+    title: "Systems & Performance",
+    items: [
+      "C and C++",
+      "CMake",
+      {
+        label: "Native plug-in interop (C++ ↔ Unity)",
+        href: IDAVIE_REPO,
+        evidence: "the iDaVIE source on GitHub",
+      },
+      {
+        label: "GPU memory and texture budgeting",
+        href: IDAVIE_PAPER,
+        evidence: "the iDaVIE v1.0 paper in Astronomy and Computing",
+      },
+      {
+        label: "Parallelised data processing (OpenMP)",
+        href: FITS2IDIA_REPO,
+        evidence: "fits2idia on GitHub",
+      },
+      {
+        label: "Frame-time profiling and optimisation",
+        href: IDAVIE_PAPER,
+        evidence: "the framerate benchmarks in the iDaVIE v1.0 paper",
+      },
+    ],
+  },
+  {
+    title: "Scientific Data & ML",
+    items: [
+      "Python",
+      "PyTorch",
+      "scikit-learn",
+      "NumPy",
+      "Neural network design, training and validation",
+      "Local LLM and speech inference (whisper.cpp, open-weight models)",
+      "Image processing and custom detection pipelines",
+      {
+        label: "FITS, HDF5, WCS, VOTable, DICOM and Parquet",
+        href: FITS2IDIA_REPO,
+        evidence: "fits2idia, a FITS to HDF5 converter, on GitHub",
+      },
+      "Large multidimensional and geospatial datasets",
+    ],
+  },
+  {
+    title: "Engineering Practice",
+    items: [
+      "Git",
+      "GitHub Actions CI",
+      "Code review and contribution integration",
+      "Release validation on clean VMs (VMware, VirtualBox)",
+      {
+        label: "Open-source release management",
+        href: IDAVIE_REPO,
+        evidence: "iDaVIE releases and issue tracking on GitHub",
+      },
+      "Versioning, documentation and issue triage",
+      {
+        label: "Zenodo DOI archiving",
+        href: IDAVIE_ZENODO,
+        evidence: "the archived iDaVIE v1.0 record on Zenodo",
+      },
+      "Linux, macOS and Windows",
+    ],
+  },
+  {
+    title: "Research Methods",
+    items: [
+      {
+        label: "User studies",
+        href: PERC_PAPER,
+        evidence:
+          "Investigating how students engage with a digital planetarium, PERC 2023",
+      },
+      "Task-based evaluation of interactive systems",
+      {
+        label: "Mixed-methods analysis (NVivo)",
+        href: THESIS,
+        evidence:
+          "Characterizing the Digital Planetarium as a Teaching and Learning Space, doctoral thesis",
+      },
+    ],
   },
 ];
 
 export const projects: Project[] = [
   {
-    slug: "asteroid-family-machine-learning",
-    title: "Asteroid-family machine learning",
+    slug: "spacedome",
+    title: "SpaceDome",
     status: "current",
-    period: "January 2025 - Present",
+    period: "March 2026 - Present",
     organisation: "Armagh Observatory & Planetarium",
-    mark: "ML / AST",
+    role: "Technical Lead",
+    mark: "EO / DOME",
     summary:
-      "Machine-learning methods for identifying asteroid families formed through disruptive events over the history of the Solar System.",
+      "As Technical Lead, I direct the architecture of an ESA-funded immersive platform for Copernicus Earth-observation data, awarded through a competitive call, spanning real-time geospatial pipelines, AI orchestration and connected VR and digital-dome delivery.",
     details: [
-      "The project develops, optimises and validates artificial neural networks designed to identify groups of asteroids that share a common origin.",
-      "Alongside the machine-learning work, I am exploring immersive visualisation methods for interrogating both real and synthetic training data, with the aim of making model behaviour and classification structure easier to inspect.",
-      "This creates a human-in-the-loop workflow in which statistical methods and visual reasoning support one another rather than operating as separate stages of the analysis.",
+      "SpaceDome combines real-time geospatial data, AI orchestration and spatial computing to support intuitive interaction with large Earth-observation datasets.",
+      "My role covers technical direction across the platform, including system architecture, data pipelines, visualisation workflows and the integration of individual VR exploration with collaborative digital-dome experiences.",
+      "The work also explores natural-language interfaces and AI-assisted navigation so that users can interrogate complex scientific information without losing the human role in directing and interpreting the analysis.",
     ],
     tags: [
-      "Planetary science",
-      "Artificial neural networks",
-      "Asteroid families",
-      "Synthetic data",
-      "Immersive analytics",
+      "Earth observation",
+      "Copernicus data",
+      "Spatial computing",
+      "AI orchestration",
+      "VR and digital domes",
     ],
-    image: "/images/projects/ann.png",
+    image: "/images/projects/spacedome.webp",
     imageAlt:
-      "A visualisation of asteroid-family structure and machine-learning classification",
+      "Earth-observation data displayed across virtual-reality and digital-dome environments",
     links: [
       {
-        label: "EPSC-DPS 2025 abstract",
-        type: "Conference abstract",
-        href: "https://doi.org/10.5194/epsc-dps2025-1601",
+        label: "ESA Space for Metaverse",
+        type: "Funding call",
+        href: "https://business.esa.int/funding/call-for-proposals-competitive/space-for-metaverse",
         description:
-          "Supporting Machine Learning-Based Asteroid Family Classification with Immersive Visualisation.",
-      },
-    ],
-  },
-  {
-    slug: "vr2dome",
-    title: "VR2Dome",
-    status: "current",
-    period: "June 2019 - Present",
-    organisation: "Armagh Observatory & Planetarium",
-    mark: "VR ↔ DOME",
-    summary:
-      "A research and development programme joining the intuitive navigation of virtual reality with the shared, collaborative environment of a digital dome theatre.",
-    details: [
-      "VR2Dome builds on my doctoral work in digital-planetarium interaction and my professional experience in immersive data visualisation. It explores new methods for interacting with large-scale immersive data environments, with a focus on accessibility, collaboration, scientific utility and digital-twin approaches for immersive facilities.",
-      "The concept bridges the strengths of VR and the dome: a researcher can navigate and select data through an intuitive individual interface while a group shares the resulting view and analysis inside the theatre. This lowers barriers to scientific use without losing the dome's value for education and public engagement.",
-      "The current phase is exploring how VR2Dome could develop into a human-in-the-loop digital twin of a planetarium, linking a virtual representation of the dome to live or simulated system state and, potentially, bidirectional control for monitoring, rehearsal, operation and collaborative analysis.",
-      "Early proof-of-concept demonstrations were developed with IDIA and Iziko Planetarium in Cape Town and presented at data-visualisation workshops. A live demonstration at the 2019 Data to Dome Workshop was later highlighted in the President's Message of The Planetarian.",
-    ],
-    tags: [
-      "Collaborative immersion",
-      "Digital domes",
-      "Virtual reality",
-      "Digital twins",
-      "Human-in-the-loop systems",
-    ],
-    image: "/images/projects/vr2dome.png",
-    imageAlt:
-      "A virtual-reality interface controlling scientific content inside a digital dome theatre",
-    links: [
-      {
-        label: "The Planetarian, December 2019",
-        type: "Editorial",
-        href: "https://cdn.ymaws.com/www.ips-planetarium.org/resource/resmgr/planetarian/201912planetarian.pdf",
-        description:
-          "The issue whose President's Message highlighted the VR-to-dome demonstration at the Data to Dome Workshop.",
-      },
-      {
-        label: "Data to Dome workshop report",
-        type: "Workshop coverage",
-        href: "https://www.colgate.edu/news/stories/colgate-hosts-data-dome-planetarium-conference",
-        description:
-          "Coverage of the 2019 workshop and its experiments with VR interfaces and planetarium audiences.",
+          "The competitive ESA call under which SpaceDome was awarded.",
       },
     ],
   },
@@ -160,24 +257,26 @@ export const projects: Project[] = [
     status: "current",
     period: "May 2018 - Present",
     organisation:
-      "IDIA — Inter-University Institute for Data Intensive Astronomy",
+      "IDIA · Inter-University Institute for Data Intensive Astronomy",
+    role: "Lead Developer",
     mark: "iDaVIE",
     summary:
-      "An open-source virtual-reality software suite for interactive exploration and analysis of volumetric data cubes and multidimensional catalogues.",
+      "An open-source Unity and SteamVR application for interactive analysis of volumetric data cubes, released at v1.0 and used by external research groups to correct source-detection masks and publish discoveries.",
     details: [
       "As lead developer, I work across the iDaVIE software suite. Its principal tools render scientific datasets in a room-scale immersive environment where users can navigate, select, inspect and edit structures directly in three dimensions.",
+      "I built the native C++ plug-in layer that feeds the volume renderer: FITS parsing, World Coordinate System handling, and a parallelised block-based downsampling algorithm that fits a cube of any size inside the renderer's texture budget while keeping the full-resolution data resident for cropping.",
       "The interaction model is designed to reduce the additional mental work involved in reasoning about 3D structures through conventional 2D interfaces, allowing researchers to focus more directly on scientific relationships and anomalies.",
       "I also lead the iDaVIE-d prototype, which brings the rendering and interaction capabilities of the VR environment into the digital planetarium.",
       "Although astronomy remains the primary application, the platform has also supported exploratory work with datasets from neuroscience, chemical engineering and astrobiology. iDaVIE-v is developed in collaboration with INAF-OAC.",
     ],
     tags: [
-      "Scientific software",
+      "Unity and C++",
       "Volumetric rendering",
       "Virtual reality",
+      "Scientific software",
       "Radio astronomy",
-      "Multidimensional data",
     ],
-    image: "/images/projects/idavie.png",
+    image: "/images/projects/idavie.webp",
     imageAlt:
       "A researcher exploring a three-dimensional astronomical data cube inside iDaVIE",
     links: [
@@ -205,78 +304,90 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "spacedome",
-    title: "SpaceDome",
+    slug: "vr2dome",
+    title: "VR2Dome",
     status: "current",
-    period: "March 2026 - Present",
+    period: "June 2019 - Present",
     organisation: "Armagh Observatory & Planetarium",
-    mark: "EO / DOME",
+    role: "Project Lead",
+    mark: "VR ↔ DOME",
     summary:
-      "An ESA-funded immersive platform for exploring Copernicus Earth-observation data through connected virtual-reality and digital-dome environments.",
+      "A research and development programme joining the intuitive navigation of virtual reality with the shared, collaborative environment of a digital dome theatre.",
     details: [
-      "SpaceDome combines real-time geospatial data, AI orchestration and spatial computing to support intuitive interaction with large Earth-observation datasets.",
-      "My role covers technical direction across the platform, including system architecture, data pipelines, visualisation workflows and the integration of individual VR exploration with collaborative digital-dome experiences.",
-      "The work also explores natural-language interfaces and AI-assisted navigation so that users can interrogate complex scientific information without losing the human role in directing and interpreting the analysis.",
+      "VR2Dome builds on my doctoral work in digital-planetarium interaction and my professional experience in immersive data visualisation. It explores new methods for interacting with large-scale immersive data environments, with a focus on accessibility, collaboration, scientific utility and digital-twin approaches for immersive facilities.",
+      "The concept bridges the strengths of VR and the dome: a researcher can navigate and select data through an intuitive individual interface while a group shares the resulting view and analysis inside the theatre. This lowers barriers to scientific use without losing the dome's value for education and public engagement.",
+      "The current phase is exploring how VR2Dome could develop into a human-in-the-loop digital twin of a planetarium, linking a virtual representation of the dome to live or simulated system state and, potentially, bidirectional control for monitoring, rehearsal, operation and collaborative analysis.",
+      "Early proof-of-concept demonstrations were developed with IDIA and Iziko Planetarium in Cape Town and presented at data-visualisation workshops. A live demonstration at the 2019 Data to Dome Workshop was later highlighted in the President's Message of The Planetarian.",
     ],
     tags: [
-      "Earth observation",
-      "Copernicus data",
-      "Spatial computing",
-      "AI orchestration",
-      "VR and digital domes",
+      "Collaborative immersion",
+      "Digital domes",
+      "Virtual reality",
+      "Digital twins",
+      "Human-in-the-loop systems",
     ],
-    image: "/images/projects/spacedome.png",
+    image: "/images/projects/vr2dome.webp",
     imageAlt:
-      "Earth-observation data displayed across virtual-reality and digital-dome environments",
-    links: [],
-  },
-  {
-    slug: "digital-planetarium-learning",
-    title: "Characterising the Digital Planetarium as a Teaching and Learning Space",
-    status: "past",
-    period: "PhD project · 2018 - 2023",
-    organisation: "University of Cape Town",
-    mark: "MCDiP",
-    summary:
-      "Doctoral research investigating how students engage with a digital planetarium, what shapes the learning environment and how those findings can guide curriculum design.",
-    details: [
-      "The study combined student responses from two university planetarium visits with detailed observational data. I designed the response instrument, created show content for the second visit and analysed both datasets using the Grounded Theory Method.",
-      "The student data produced a localised model centred on a spectrum of attentiveness that strongly influenced engagement. The observational data produced a second model describing the contextual factors that shape the planetarium teaching and learning space.",
-      "I then connected the localised models with Working Memory and Cognitive Load Theory to develop the Model for Curriculum Design in the Planetarium, or MCDiP: a systematic framework for shaping the digital planetarium as an effective teaching and learning environment.",
-    ],
-    tags: [
-      "Astronomy education research",
-      "Grounded Theory Method",
-      "Cognitive Load Theory",
-      "Digital planetariums",
-      "Curriculum design",
-    ],
-    image: "/images/projects/digital-planetarium/iziko-planetarium.webp",
-    imageAlt:
-      "Students taking part in an astronomy learning experience inside a digital planetarium",
+      "A virtual-reality interface controlling scientific content inside a digital dome theatre",
     links: [
       {
-        label: "Doctoral thesis",
-        type: "Thesis",
-        href: "https://open.uct.ac.za/handle/11427/40358",
+        label: "The Planetarian, December 2019",
+        type: "Editorial",
+        href: "https://cdn.ymaws.com/www.ips-planetarium.org/resource/resmgr/planetarian/201912planetarian.pdf",
         description:
-          "The complete study and the Model for Curriculum Design in the Planetarium.",
+          "The issue whose President's Message highlighted the VR-to-dome demonstration at the Data to Dome Workshop.",
       },
       {
-        label: "Investigating how students engage with a digital planetarium",
-        type: "Peer-reviewed proceedings",
-        href: "https://doi.org/10.1119/perc.2023.pr.Sivitilli",
+        label: "Data to Dome workshop report",
+        type: "Workshop coverage",
+        href: "https://www.colgate.edu/news/stories/colgate-hosts-data-dome-planetarium-conference",
         description:
-          "The first peer-reviewed publication from the project, presented in the 2023 PERC proceedings.",
+          "Coverage of the 2019 workshop and its experiments with VR interfaces and planetarium audiences.",
+      },
+    ],
+  },
+  {
+    slug: "asteroid-family-machine-learning",
+    title: "Asteroid-family machine learning",
+    status: "current",
+    period: "January 2025 - Present",
+    organisation: "Armagh Observatory & Planetarium",
+    role: "Leverhulme Postdoctoral Research Associate",
+    mark: "ML / AST",
+    summary:
+      "Machine-learning methods for identifying asteroid families formed through disruptive events over the history of the Solar System.",
+    details: [
+      "The project develops, optimises and validates artificial neural networks designed to identify groups of asteroids that share a common origin.",
+      "Alongside the machine-learning work, I am exploring immersive visualisation methods for interrogating both real and synthetic training data, with the aim of making model behaviour and classification structure easier to inspect.",
+      "This creates a human-in-the-loop workflow in which statistical methods and visual reasoning support one another rather than operating as separate stages of the analysis.",
+    ],
+    tags: [
+      "Planetary science",
+      "Artificial neural networks",
+      "Asteroid families",
+      "Synthetic data",
+      "Immersive analytics",
+    ],
+    image: "/images/projects/ann.webp",
+    imageAlt:
+      "A visualisation of asteroid-family structure and machine-learning classification",
+    links: [
+      {
+        label: "EPSC-DPS 2025 abstract",
+        type: "Conference abstract",
+        href: "https://doi.org/10.5194/epsc-dps2025-1601",
+        description:
+          "Supporting Machine Learning-Based Asteroid Family Classification with Immersive Visualisation.",
       },
     ],
   },
   {
     slug: "laser-alignment-telescope",
-    title: "Laser Alignment Telescope at the Large Binocular Telescope",
+    title: "Laser Alignment Telescope and Smart Laser Alignment",
     status: "past",
     period: "Master's project · May 2015 - June 2016",
     organisation: "Max Planck Institute for Astronomy · Heidelberg University",
+    role: "Research Assistant",
     mark: "LAT / LBT",
     summary:
       "A purpose-built telescope and open-source image-analysis system for automatically locating and aligning the ARGOS laser guide stars.",
@@ -286,10 +397,10 @@ export const projects: Project[] = [
       "The automated alignment approach was released as the open-source Collimating Smart Laser Alignment Algorithm, or ColSLAA, which uses LAT images to determine the pointing directions of the guide stars.",
     ],
     tags: [
-      "Adaptive optics",
-      "Astronomical instrumentation",
+      "Optical instrumentation",
+      "Control software",
       "Computer vision",
-      "Laser guide stars",
+      "Adaptive optics",
       "Open-source software",
     ],
     image: "/images/projects/laser-alignment/argos-lasers.webp",
@@ -316,6 +427,48 @@ export const projects: Project[] = [
         href: "https://www.mpe.mpg.de/ir/argos",
         description:
           "Background on the laser-guide-star adaptive-optics system at the Large Binocular Telescope.",
+      },
+    ],
+  },
+  {
+    slug: "digital-planetarium-learning",
+    title: "Characterising the Digital Planetarium as a Teaching and Learning Space",
+    status: "past",
+    period: "PhD project · 2018 - 2023",
+    organisation: "University of Cape Town",
+    role: "Doctoral researcher",
+    mark: "MCDiP",
+    summary:
+      "Doctoral research investigating how students engage with a digital planetarium, what shapes the learning environment and how those findings can guide curriculum design.",
+    details: [
+      "The study combined student responses from two university planetarium visits with detailed observational data. I designed the response instrument, created show content for the second visit and analysed both datasets using the Grounded Theory Method.",
+      "The student data produced a localised model centred on a spectrum of attentiveness that strongly influenced engagement. The observational data produced a second model describing the contextual factors that shape the planetarium teaching and learning space.",
+      "I then connected the localised models with Working Memory and Cognitive Load Theory to develop the Model for Curriculum Design in the Planetarium, or MCDiP: a systematic framework for shaping the digital planetarium as an effective teaching and learning environment.",
+    ],
+    tags: [
+      "Human-computer interaction",
+      "Mixed-methods user research",
+      "Grounded Theory Method",
+      "Cognitive Load Theory",
+      "Curriculum design",
+    ],
+    image: "/images/projects/digital-planetarium/iziko-planetarium.webp",
+    imageAlt:
+      "Students taking part in an astronomy learning experience inside a digital planetarium",
+    links: [
+      {
+        label: "Doctoral thesis",
+        type: "Thesis",
+        href: "https://open.uct.ac.za/handle/11427/40358",
+        description:
+          "The complete study and the Model for Curriculum Design in the Planetarium.",
+      },
+      {
+        label: "Investigating how students engage with a digital planetarium",
+        type: "Peer-reviewed proceedings",
+        href: "https://doi.org/10.1119/perc.2023.pr.Sivitilli",
+        description:
+          "The first peer-reviewed publication from the project, presented in the 2023 PERC proceedings.",
       },
     ],
   },

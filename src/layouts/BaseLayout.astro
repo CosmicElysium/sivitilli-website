@@ -5,16 +5,44 @@ import { socialLinks } from "../data/content";
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 const {
   title = "Alexander Sivitilli",
-  description = "Immersive scientific visualisation, machine learning, astronomy and spatial computing.",
+  description = "Graphics engineer building real-time 3D and VR software for large scientific datasets.",
+  image = "/images/og-default.jpg",
+  imageAlt = "A three-dimensional astronomical data cube rendered in virtual reality",
 } = Astro.props;
 
+const site = Astro.site ?? new URL("https://sivitil.li");
 const currentPath = Astro.url.pathname;
-const canonicalURL = new URL(currentPath, "https://sivitil.li");
+const canonicalURL = new URL(currentPath, site);
+const imageURL = new URL(image, site);
 const currentYear = new Date().getFullYear();
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Alexander Sivitilli",
+  jobTitle: "Technical Lead",
+  description:
+    "Graphics engineer building real-time 3D and VR software for large scientific datasets.",
+  url: site.href,
+  image: new URL("/images/sivitilli.webp", site).href,
+  email: "mailto:dr@sivitil.li",
+  worksFor: {
+    "@type": "Organization",
+    name: "Armagh Observatory & Planetarium",
+  },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: "University of Cape Town" },
+    { "@type": "CollegeOrUniversity", name: "Heidelberg University" },
+    { "@type": "CollegeOrUniversity", name: "University of Washington" },
+  ],
+  sameAs: socialLinks.map((link) => link.href),
+};
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -32,16 +60,37 @@ const isActive = (href: string) =>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="author" content="Alexander Sivitilli" />
     <meta name="theme-color" content="#07111f" />
 
     <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="any" />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Alexander Sivitilli" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <title>{title}</title>
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(personSchema)}
+    />
   </head>
 
   <body>
@@ -65,7 +114,11 @@ const isActive = (href: string) =>
               </a>
             ))
           }
-          <a href="/cv/Alexander-Sivitilli-CV.pdf">CV</a>
+          <a
+            href="/cv/Alexander-Sivitilli-CV.pdf"
+            target="_blank"
+            rel="noopener noreferrer">CV</a
+          >
           <a href="/#contact">Contact</a>
         </div>
       </nav>

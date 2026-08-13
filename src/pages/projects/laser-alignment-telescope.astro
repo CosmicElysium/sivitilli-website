@@ -15,8 +15,7 @@ if (!project) {
 
 const statusLabel = project.status === "past" ? "Completed" : "Current";
 
-// Add approved images under public/images/projects/laser-alignment/,
-// then set the corresponding paths below. Empty paths are not rendered.
+// Empty paths are not rendered.
 const images = {
   hero: {
     src: "/images/projects/laser-alignment/argos-lasers.webp",
@@ -50,8 +49,6 @@ const galleryImages = [
   images.interface,
 ].filter((image) => image.src);
 
-// Add a public thesis URL when one is available, for example:
-// "/documents/sivitilli-laser-alignment-thesis.pdf"
 const thesisHref = "/documents/sivitilli_masters_thesis.pdf";
 
 const benchmarkRows = [
@@ -93,7 +90,9 @@ const benchmarkRows = [
       ]}
     >
       <div class="project-detail-intro">
-        <p class="eyebrow">Astronomical instrumentation · Completed project</p>
+        <p class="eyebrow">
+          Optical instrumentation and control software · Completed project
+        </p>
         <h1>Laser Alignment Telescope and Smart Laser Alignment</h1>
         <p class="project-deck">
           A purpose-built telescope and computer-vision workflow developed to

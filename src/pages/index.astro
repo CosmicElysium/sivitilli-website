@@ -1,41 +1,53 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { currentResearch, socialLinks } from "../data/content";
+import { whatIBuild, socialLinks, toolkit } from "../data/content";
 ---
 
 <BaseLayout
-  title="Alexander Sivitilli · Astronomy, Scientific Visualisation & Machine Learning"
-  description="Researcher and technical developer working across astronomy, planetary science, immersive data visualisation, machine learning, digital planetariums and education research."
+  title="Alexander Sivitilli · 3D Graphics & XR Engineer"
+  description="Graphics engineer building real-time 3D and VR software for large scientific datasets. Technical Lead on SpaceDome (ESA). Lead developer of iDaVIE."
 >
   <section class="hero shell" aria-labelledby="hero-title">
     <div class="hero-copy">
       <p class="eyebrow">
-        Immersive scientific visualisation · Machine learning · Astronomy
+        Real-time 3D & XR · Scientific visualisation · Astronomy
       </p>
 
       <h1 id="hero-title">Alexander Sivitilli</h1>
 
       <p class="intro">
-        I develop immersive and AI-assisted tools that help researchers explore
-        complex scientific data, with applications in astronomy, planetary
-        science and Earth observation.
+        I build real-time 3D and virtual-reality software for large scientific
+        datasets, and I hold a doctorate in how people actually use it. Eight
+        years across GPU rendering, data pipelines, interaction design and
+        digital-dome delivery.
       </p>
 
       <p class="role-line">
-        Leverhulme Postdoctoral Research Associate at Armagh Observatory &
+        Technical Lead on SpaceDome, an ESA-funded Earth-observation platform,
+        and Leverhulme Postdoctoral Research Associate at Armagh Observatory &
         Planetarium.
       </p>
 
       <div class="button-row">
-        <a class="button primary" href="/projects/">Explore projects</a>
-        <a class="button" href="/publications/">Publications</a>
-        <a class="button" href="/cv/Alexander-Sivitilli-CV.pdf">Download CV</a>
+        <a class="button primary" href="/projects/">View projects</a>
+        <a
+          class="button"
+          href="https://github.com/CosmicElysium"
+          target="_blank"
+          rel="noopener noreferrer">GitHub</a
+        >
+        <a
+          class="button"
+          href="/cv/Alexander-Sivitilli-CV.pdf"
+          target="_blank"
+          rel="noopener noreferrer">Download CV</a
+        >
       </div>
     </div>
 
-    <aside class="hero-portrait" aria-label="Portrait and research approach">
+    <aside class="hero-portrait" aria-label="Portrait and approach">
       <img
-        src="/images/sivitilli.PNG"
+        src="/images/sivitilli.webp"
         alt="Portrait of Alexander Sivitilli"
         class="headshot"
       />
@@ -50,18 +62,95 @@ import { currentResearch, socialLinks } from "../data/content";
     </aside>
   </section>
 
-  <section class="section shell" aria-labelledby="research-title">
+  <section class="section shell" aria-labelledby="build-title">
     <div class="section-heading">
-      <p class="eyebrow">Current research</p>
-      <h2 id="research-title">Three connected lines of work.</h2>
+      <p class="eyebrow">What I build</p>
+      <h2 id="build-title">Three connected lines of work.</h2>
     </div>
 
     <div class="research-grid">
       {
-        currentResearch.map((area, index) => (
+        whatIBuild.map((area) => (
           <article class="research-card">
             <h3>{area.title}</h3>
             <p>{area.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="flagship-title">
+    <div class="section-heading">
+      <p class="eyebrow">Flagship project</p>
+      <h2 id="flagship-title">
+        iDaVIE: open-source VR for volumetric scientific data.
+      </h2>
+    </div>
+
+    <div class="flagship">
+      <p class="flagship-lead">
+        First author and lead developer of a Unity and SteamVR application for
+        interactive analysis of 3D data cubes, released at v1.0 under LGPL v3,
+        registered in the Astrophysics Source Code Library and published in
+        <i>Astronomy and Computing</i> with twelve authors across five countries.
+        External groups have used it to correct source-detection masks and
+        publish discoveries they credit to the tool.
+      </p>
+
+      <div class="button-row">
+        <a class="button primary" href="/projects/idavie/">Read the case study</a
+        >
+        <a
+          class="button"
+          href="https://github.com/idia-astro/iDaVIE/"
+          target="_blank"
+          rel="noopener noreferrer">Source on GitHub</a
+        >
+        <a
+          class="button"
+          href="https://doi.org/10.1016/j.ascom.2026.101109"
+          target="_blank"
+          rel="noopener noreferrer">v1.0 paper</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="toolkit-title">
+    <div class="section-heading">
+      <p class="eyebrow">Toolkit</p>
+      <h2 id="toolkit-title">What I build with.</h2>
+      <p class="section-note">
+        Where a claim has something public behind it, it links to the code,
+        paper or release that shows it.
+      </p>
+    </div>
+
+    <div class="toolkit-grid">
+      {
+        toolkit.map((group) => (
+          <article class="toolkit-card">
+            <h3>{group.title}</h3>
+            <ul class="tag-list" aria-label={`${group.title} skills`}>
+              {group.items.map((item) =>
+                typeof item === "string" ? (
+                  <li>{item}</li>
+                ) : (
+                  <li class="tag-evidence">
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${item.label}. Evidence: ${item.evidence}.`}
+                    >
+                      {item.label}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ),
+              )}
+            </ul>
           </article>
         ))
       }
@@ -78,10 +167,10 @@ import { currentResearch, socialLinks } from "../data/content";
 
     <div class="about-copy">
       <p>
-        My work sits at the intersection of scientific software, immersive
-        environments, astronomy, machine learning and human interaction. I am
-        interested not only in whether a new interface is technically possible,
-        but in whether it genuinely makes difficult data easier to reason about.
+        My work sits at the intersection of real-time graphics, immersive
+        systems, scientific software and human interaction. I am interested not
+        only in whether a new interface is technically possible, but in whether
+        it genuinely makes difficult data easier to reason about.
       </p>
 
       <p>
@@ -104,9 +193,10 @@ import { currentResearch, socialLinks } from "../data/content";
         <p class="eyebrow">Contact</p>
         <h2 id="contact-title">Let's make complex data easier to reach.</h2>
         <p>
-          I welcome conversations about immersive scientific visualisation,
-          research collaborations, digital-dome systems and interaction with
-          complex data in three-dimensional space.
+          Currently open to 3D, XR and visualisation engineering roles, in
+          industry or research. I also welcome conversations about immersive
+          scientific visualisation, digital-dome systems and research
+          collaboration.
         </p>
       </div>
 
@@ -114,6 +204,11 @@ import { currentResearch, socialLinks } from "../data/content";
         <a class="button primary" href="mailto:dr@sivitil.li">
           dr@sivitil.li
         </a>
+
+        <p class="availability">
+          Based in Armagh, Northern Ireland. Open to relocation or remote work.
+          EU, UK and US work eligibility.
+        </p>
 
         <div class="social-list" aria-label="Professional profiles">
           {
@@ -128,3 +223,98 @@ import { currentResearch, socialLinks } from "../data/content";
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .flagship {
+    max-width: 1000px;
+  }
+
+  .flagship-lead {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+  }
+
+  .flagship .button-row {
+    margin-top: 2.25rem;
+  }
+
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .toolkit-card {
+    padding: clamp(1.4rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  /* With an odd number of groups the last card would sit alone in a half
+     column, so let it run the full width instead. */
+  .toolkit-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .toolkit-card h3 {
+    font-size: 1.15rem;
+  }
+
+  .toolkit-card .tag-list {
+    margin-top: 1.1rem;
+  }
+
+  .section-note {
+    max-width: 46ch;
+    margin: 1rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  /* Linked pills carry the padding on the anchor so the whole pill is a
+     target, not just the text. */
+  .tag-evidence {
+    padding: 0;
+    border-color: var(--line-strong);
+    background: rgba(135, 185, 255, 0.09);
+  }
+
+  .tag-evidence a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.7rem;
+    border-radius: 999px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .tag-evidence a span {
+    font-size: 0.9em;
+    opacity: 0.65;
+  }
+
+  .tag-evidence a:hover {
+    color: var(--accent);
+  }
+
+  .tag-evidence a:hover span {
+    opacity: 1;
+  }
+
+  .availability {
+    max-width: 32ch;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .toolkit-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

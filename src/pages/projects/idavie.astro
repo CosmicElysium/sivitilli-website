@@ -1,0 +1,1290 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectImage from "../../components/ProjectImage.astro";
+import { projects } from "../../data/content";
+
+const project = projects.find((item) => item.slug === "idavie");
+
+if (!project) {
+  throw new Error('Project "idavie" was not found in src/data/content.ts.');
+}
+
+const statusLabel = project.status === "past" ? "Completed" : "Current";
+
+// Figures are the author's own, reproduced from the iDaVIE v1.0 paper.
+// Empty paths are not rendered. Add further screenshots under
+// public/images/projects/idavie/ and fill in the entries below.
+const images = {
+  hero: {
+    src: "/images/projects/idavie.webp",
+    width: "1979",
+    height: "1282",
+    alt: "A three-dimensional astronomical data cube rendered volumetrically inside iDaVIE",
+    caption:
+      "A volumetric data cube rendered at room scale in the iDaVIE virtual-reality environment.",
+  },
+  architecture: {
+    src: "/images/projects/idavie/architecture.webp",
+    width: "2215",
+    height: "2362",
+    alt: "Architecture diagram of iDaVIE showing menu controllers, VR interaction, desktop interaction, data management, native plug-ins, the rendering layer and the feature layer, with the data flows between them",
+    caption:
+      "Simplified high-level architecture. The native plug-ins on the right do the file and numerical work; everything to the left of them is Unity.",
+  },
+  selection: {
+    src: "/images/projects/idavie/selection.webp",
+    width: "1800",
+    height: "1176",
+    alt: "A selection box drawn around a region of a data cube in virtual reality, with the controller cursor showing the region dimensions, sky angle and velocity depth",
+    caption:
+      "Creating a selection box. The cursor reports the region in voxels, the angle across the sky and the depth in velocity, so the box doubles as a measuring tool.",
+  },
+  painting: {
+    src: "/images/projects/idavie/mask-painting.webp",
+    width: "1620",
+    height: "1000",
+    alt: "Mask painting mode in iDaVIE, with masked voxels outlined in wireframe, a paint menu on the secondary controller and a plots window showing the resulting moment maps",
+    caption:
+      "Mask painting. Masked voxels are outlined in wireframe, and the plots window updates the moment maps as the mask changes.",
+  },
+  features: {
+    src: "/images/projects/idavie/features.webp",
+    width: "1800",
+    height: "1225",
+    alt: "Several types of Feature overlaying a data cube: magenta boxes from a loaded mask, cyan boxes imported from a catalogue and green user-defined boxes",
+    caption:
+      "Features overlaying the cube: magenta from the loaded mask, cyan imported from a VOTable catalogue, green created by hand in VR.",
+  },
+};
+
+const galleryImages = [
+  images.selection,
+  images.painting,
+  images.features,
+].filter((image) => image.src);
+
+const benchmarkRows = [
+  { cube: "Synthetic S", native: "256³", median: "90.5", min: "38.3" },
+  { cube: "Synthetic M", native: "512³", median: "89.3", min: "35.2" },
+  { cube: "Synthetic L", native: "1024³", median: "88.7", min: "39.1" },
+  { cube: "Synthetic XL", native: "1536³", median: "88.9", min: "35.0" },
+  {
+    cube: "Science (Fornax HI)",
+    native: "1046 × 952 × 398",
+    median: "90.6",
+    min: "42.3",
+  },
+];
+---
+
+<BaseLayout
+  title="iDaVIE: virtual reality for volumetric scientific data · Alexander Sivitilli"
+  description="Lead developer of iDaVIE, an open-source Unity and SteamVR application for interactive analysis of 3D data cubes, released at v1.0 and published in Astronomy and Computing."
+>
+  <article class="project-page">
+    <nav class="project-breadcrumb shell" aria-label="Breadcrumb">
+      <a href="/projects/">Projects</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">iDaVIE</span>
+    </nav>
+
+    <header
+      class:list={[
+        "project-detail-hero",
+        "shell",
+        !images.hero.src && "project-detail-hero--without-media",
+      ]}
+    >
+      <div class="project-detail-intro">
+        <p class="eyebrow">Real-time 3D and VR software · Active project</p>
+        <h1>iDaVIE: virtual reality for volumetric scientific data</h1>
+        <p class="project-deck">
+          An open-source Unity and SteamVR application for interactive analysis
+          of 3D data cubes, released at version 1.0 and used by external
+          research groups to correct source-detection masks and publish
+          discoveries.
+        </p>
+
+        <div class="button-row">
+          {
+            project.links.map((link) => (
+              <a
+                class:list={[
+                  "button",
+                  link.type === "Source code" && "primary",
+                ]}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      {
+        images.hero.src && (
+          <figure class="project-hero-media">
+            <ProjectImage
+              src={images.hero.src}
+              alt={images.hero.alt}
+              width={images.hero.width}
+              height={images.hero.height}
+              loading="eager"
+              fetchpriority="high"
+            />
+            <figcaption>{images.hero.caption}</figcaption>
+          </figure>
+        )
+      }
+
+      <dl class="project-facts">
+        <div>
+          <dt>Status</dt>
+          <dd>{statusLabel}</dd>
+        </div>
+        <div>
+          <dt>Dates</dt>
+          <dd>{project.period}</dd>
+        </div>
+        <div>
+          <dt>Institution</dt>
+          <dd>{project.organisation}</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>Unity · SteamVR · C++ · HLSL</dd>
+        </div>
+        <div>
+          <dt>Role</dt>
+          <dd>{project.role}</dd>
+        </div>
+      </dl>
+
+      <ul class="project-tags" aria-label="Project topics">
+        {project.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    </header>
+
+    <div class="project-body shell">
+      <section class="project-detail-section" aria-labelledby="overview-title">
+        <div class="section-label">
+          <p class="eyebrow">Overview</p>
+          <h2 id="overview-title">
+            Data that stopped fitting on a flat screen.
+          </h2>
+        </div>
+
+        <div class="project-prose">
+          <p class="lead">
+            Radio telescopes such as MeerKAT, ASKAP and APERTIF now produce
+            spectral cubes with the same number of spatial pixels as a decade
+            ago but up to 32,000 spectral channels. Assessing a cube like that
+            one slice at a time is no longer practical, and the structures that
+            matter most, the kinematic ones, are exactly those a stack of 2D
+            projections hides.
+          </p>
+
+          <p>
+            iDaVIE renders the whole volume in room-scale virtual reality, where
+            navigating, selecting, masking and measuring happen directly in
+            three dimensions. It is built to sit inside an existing workflow
+            rather than replace it: it reads standard FITS cubes and masks,
+            imports VOTable catalogues, and exports edited masks, cropped
+            subcubes, moment maps and spectral profiles back into the formats
+            the rest of the pipeline expects.
+          </p>
+
+          <p>
+            The design rule throughout was to add an immersive interface only
+            where it earns its place. File loading, parameter tuning and
+            debugging stay on the desktop, where a keyboard is better.
+            Navigation, selection and mask painting move into VR, where the flat
+            screen is the bottleneck.
+          </p>
+        </div>
+      </section>
+
+      <section class="project-detail-section" aria-labelledby="role-title">
+        <div class="section-label">
+          <p class="eyebrow">My role</p>
+          <h2 id="role-title">Lead developer since the first prototype.</h2>
+        </div>
+
+        <div class="project-prose">
+          <p>
+            I have worked on iDaVIE since 2018, from the original room-scale
+            proof of concept through to the version 1.0 release. I am first
+            author and corresponding author on the software paper, credited for
+            software, methodology, validation and conceptualisation.
+          </p>
+
+          <ul class="scope-list">
+            <li>
+              Built the native C++ plug-in layer that parses FITS, handles World
+              Coordinate System transformations and computes statistics and
+              downsampling.
+            </li>
+            <li>
+              Designed the interaction model, including the locomotion and
+              interaction state machines, the selection and mask-painting tools
+              and the voice-command layer.
+            </li>
+            <li>
+              Worked on the HLSL ray-marching shader and the rendering
+              trade-offs that keep large cubes inside the VR comfort threshold.
+            </li>
+            <li>
+              Coordinated releases, documentation and user support across an
+              international collaboration, and supervised eight honours and MSc
+              students contributing to the codebase.
+            </li>
+            <li>
+              Lead the iDaVIE-d prototype, which extends the rendering and
+              interaction stack into the digital planetarium.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="project-detail-section" aria-labelledby="system-title">
+        <div class="section-label">
+          <p class="eyebrow">System design</p>
+          <h2 id="system-title">Three layers behind a single Unity scene.</h2>
+        </div>
+
+        <div class="system-column">
+          <div class="system-grid">
+            <article class="system-card">
+              <p class="system-number" aria-hidden="true">01</p>
+              <h3>Native plug-ins</h3>
+            <p>
+                C++ libraries compiled to a native DLL and bound into Unity
+                through C# interface classes. FitsReader parses cubes through
+                CFITSIO, AstTool resolves coordinates and units through AstLib,
+                and DataAnalysis handles statistics and downsampling.
+              </p>
+            </article>
+
+            <article class="system-card">
+              <p class="system-number" aria-hidden="true">02</p>
+              <h3>Rendering layer</h3>
+              <p>
+                A custom HLSL shader on Unity's Built-In Render Pipeline
+                ray-marches the 3D texture, using ray-box intersection to bound
+                each ray and a maximum or mean transfer function along the
+                interval, then applies a Matplotlib-derived colourmap with
+                value-normalised alpha.
+              </p>
+            </article>
+
+            <article class="system-card">
+              <p class="system-number" aria-hidden="true">03</p>
+              <h3>Interaction and Features</h3>
+              <p>
+                Two state machines separate locomotion from interaction. A
+                Feature system marks regions of interest, whether derived from a
+                loaded mask, imported from a VOTable catalogue or created by
+                hand in VR, and exports them back out as catalogues.
+              </p>
+            </article>
+          </div>
+
+          <figure class="diagram-figure">
+            <div class="diagram-frame">
+              <ProjectImage
+                src={images.architecture.src}
+                alt={images.architecture.alt}
+                width={images.architecture.width}
+                height={images.architecture.height}
+                loading="lazy"
+              />
+            </div>
+            <figcaption>{images.architecture.caption}</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section
+        class="project-detail-section"
+        aria-labelledby="engineering-title"
+      >
+        <div class="section-label">
+          <p class="eyebrow">Engineering</p>
+          <h2 id="engineering-title">
+            Fitting arbitrarily large cubes into a fixed texture budget.
+          </h2>
+        </div>
+
+        <div class="project-prose">
+          <p class="lead">
+            Unity's hard ceiling on a single texture is 4 GB, a consequence of
+            32-bit memory addressing. In practice the binding limit is far
+            lower. iDaVIE defaults to 368 MB, a figure arrived at by trial and
+            error against rendering performance rather than derived from the
+            hardware, and adjustable in configuration for stronger GPUs.
+          </p>
+
+          <p>
+            The reason the limit is a correctness requirement rather than a
+            performance target is the 90 Hz VR comfort threshold. Below it,
+            users get sick. That constraint pushes the expensive work out of the
+            frame and into the load pipeline.
+          </p>
+
+          <ol class="process-list">
+            <li>
+              <div>
+                <h3>Parse the cube natively</h3>
+                <p>
+                  The FitsReader plug-in reads the FITS file into a float buffer
+                  outside the managed heap. Four-dimensional cubes have their
+                  spectral axis resolved automatically where it is unambiguous,
+                  and the user is prompted where it is not.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Search for downsampling factors that fit</h3>
+                <p>
+                  Three per-axis factors start at 1, 1, 1 and increment until the
+                  resulting texture falls under the budget, alternating between
+                  the two spatial axes and the spectral one so the cube degrades
+                  evenly rather than collapsing along a single dimension.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Aggregate in parallel</h3>
+                <p>
+                  Each output voxel becomes the mean or the maximum of its
+                  corresponding block in the source cube, selected by
+                  configuration. The largest cube benchmarked, 1536³, reduces to
+                  a 384 × 384 × 512 texture.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Keep the full resolution resident</h3>
+                <p>
+                  The full-resolution cube and mask stay in RAM. When a user
+                  crops to a region small enough to fit the budget, downsampling
+                  is skipped entirely and they get the real voxels, then can
+                  switch back to the overview without touching the disk again.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="project-detail-section" aria-labelledby="findings-title">
+        <div class="section-label">
+          <p class="eyebrow">Rendering findings</p>
+          <h2 id="findings-title">Two results worth writing down.</h2>
+        </div>
+
+        <div class="system-grid">
+          <article class="system-card">
+            <p class="system-number" aria-hidden="true">01</p>
+            <h3>Framerate is anisotropic</h3>
+            <p>
+              Looking down the y and z axes measurably underperforms looking down
+              x, because of how the 3D texture is laid out in memory and how the
+              ray-marcher walks it: fewer cache hits along the slower
+              directions. This is worth documenting, because a user who
+              benchmarks their hardware from one viewing angle will overestimate
+              the cube size it can carry.
+            </p>
+          </article>
+
+          <article class="system-card">
+            <p class="system-number" aria-hidden="true">02</p>
+            <h3>Bilinear filtering is off on purpose</h3>
+            <p>
+              Unity smooths 3D textures by default, and the smoothed render
+              looks better. It also blurs the boundary between adjacent voxel
+              values, which is precisely the distinction the science depends on.
+              Filtering is disabled by default: we chose the blockier image.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section
+        class="project-detail-section"
+        aria-labelledby="performance-title"
+      >
+        <div class="section-label">
+          <p class="eyebrow">Performance</p>
+          <h2 id="performance-title">Holding 90 Hz as the cube grows.</h2>
+        </div>
+
+        <div class="project-prose">
+          <p>
+            Median framerate stays close to the headset refresh rate across a
+            sixfold range of native cube dimensions, because the adaptive
+            downsampling absorbs the growth before the renderer sees it. The
+            real cost of a larger dataset shows up in load time and memory
+            instead: the 1536³ cube takes 45 seconds to load and peaks around
+            22 GB of private memory, against 2.9 seconds and 3.2 GB for a
+            representative science cube.
+          </p>
+
+          <div
+            class="table-wrap"
+            tabindex="0"
+            aria-label="Scrollable framerate benchmark table"
+          >
+            <table>
+              <caption>
+                Framerate during a scripted cube-translation protocol, averaged
+                over three runs. Measured on an Intel Core Ultra 9 185H with
+                32 GB DDR5 and an NVIDIA RTX 4070 Laptop GPU, driving a Meta
+                Quest 3 over a wired link at 90 Hz. Reported in the version 1.0
+                paper.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Cube</th>
+                  <th scope="col">Native dimensions</th>
+                  <th scope="col">Median fps</th>
+                  <th scope="col">Minimum fps</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  benchmarkRows.map((row) => (
+                    <tr>
+                      <th scope="row">{row.cube}</th>
+                      <td>{row.native}</td>
+                      <td>{row.median}</td>
+                      <td>{row.min}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {
+        galleryImages.length > 0 && (
+          <section
+            class="project-detail-section"
+            aria-labelledby="media-title"
+          >
+            <div class="section-label">
+              <p class="eyebrow">Project media</p>
+              <h2 id="media-title">Selection, masking and catalogues.</h2>
+            </div>
+
+            <div class="project-gallery">
+              {galleryImages.map((image) => (
+                <figure>
+                  <ProjectImage
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    loading="lazy"
+                  />
+                  <figcaption>{image.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section class="project-detail-section" aria-labelledby="outcomes-title">
+        <div class="section-label">
+          <p class="eyebrow">Outcomes</p>
+          <h2 id="outcomes-title">
+            Results other groups published using the tool.
+          </h2>
+        </div>
+
+        <div class="outcomes-grid">
+          <article>
+            <h3>Fornax A group</h3>
+            <p>
+              Refining a SoFiA detection mask in iDaVIE added two neutral
+              hydrogen sources that automated reliability thresholds had
+              excluded, and removed spurious ones (Kleiner et al. 2021).
+            </p>
+          </article>
+
+          <article>
+            <h3>MeerKAT Fornax Survey</h3>
+            <p>
+              Visual verification across angular and velocity scales guided the
+              clean mask behind the first evidence of ram pressure shaping the
+              distribution of neutral hydrogen in a Fornax cluster galaxy
+              (Serra et al. 2023).
+            </p>
+          </article>
+
+          <article>
+            <h3>WALLABY polar rings</h3>
+            <p>
+              The mask-painting tool isolated anomalous gas from the galactic
+              disks of two polar ring galaxies, NGC 4632 and NGC 6156, for
+              follow-up kinematic modelling (Deg et al. 2023).
+            </p>
+          </article>
+
+          <article>
+            <h3>Release</h3>
+            <p>
+              Version 1.0 under the GNU LGPL v3, registered in the Astrophysics
+              Source Code Library as ascl:2607.010, archived on Zenodo, and
+              published in <i>Astronomy and Computing</i> 56, 101109.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="project-detail-section" aria-labelledby="limits-title">
+        <div class="section-label">
+          <p class="eyebrow">Limitations and future work</p>
+          <h2 id="limits-title">What version 1.0 does not yet do.</h2>
+        </div>
+
+        <div class="project-prose">
+          <p>
+            Loading is all-or-nothing: a full 3D cube from a single header data
+            unit. Very large cubes therefore cost long load times and enough
+            downsampling to wash out features before the user can crop in.
+            Memory scales with the full cube rather than the texture, so
+            insufficient RAM sends the operating system to disk. Subcube bounds
+            and HDU selection are the main targets for version 1.1.
+          </p>
+
+          <p>
+            The default maximum-value transfer function serves users looking for
+            bright emission, but it discards absorption features even when they
+            are statistically significant. A hybrid function that takes whichever
+            of the maximum or minimum is larger in absolute value would address
+            this, and a radiative-transfer-based shader would go further.
+          </p>
+
+          <p>
+            Visualisation and analysis are still tightly coupled inside the
+            native plug-ins. Separating them so that analysis can arrive as
+            third-party plug-ins is what would let other disciplines adopt the
+            renderer without inheriting the astronomy.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="project-detail-section"
+        aria-labelledby="collaboration-title"
+      >
+        <div class="section-label">
+          <p class="eyebrow">Collaboration</p>
+          <h2 id="collaboration-title">Built across five countries.</h2>
+        </div>
+
+        <div class="project-prose">
+          <p>
+            iDaVIE is developed at the Inter-University Institute for Data
+            Intensive Astronomy with collaborators across South Africa, Italy,
+            the Netherlands, the United States and the United Kingdom. The
+            version 1.0 paper carries twelve authors, and iDaVIE-v is developed
+            in collaboration with INAF Osservatorio Astrofisico di Catania.
+          </p>
+
+          <p>
+            Although astronomy remains the primary application, the platform has
+            also supported exploratory work with datasets from neuroscience,
+            chemical engineering and astrobiology.
+          </p>
+        </div>
+      </section>
+
+      <section class="project-resources" aria-labelledby="resources-title">
+        <div>
+          <p class="eyebrow">Resources</p>
+          <h2 id="resources-title">Code, documentation and the paper.</h2>
+        </div>
+
+        <div class="resource-list">
+          {
+            project.links.map((link) => (
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                <span class="resource-type">{link.type}</span>
+                <strong>{link.label}</strong>
+                {link.description && <span>{link.description}</span>}
+              </a>
+            ))
+          }
+          <a
+            href="https://doi.org/10.5281/zenodo.13752029"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="resource-type">Software archive</span>
+            <strong>iDaVIE v1.0 on Zenodo</strong>
+            <span>The citable archived release of the version 1.0 software.</span>
+          </a>
+          <a
+            href="https://ascl.net/2607.010"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="resource-type">Code registry</span>
+            <strong>Astrophysics Source Code Library</strong>
+            <span>The ASCL entry for iDaVIE, ascl:2607.010.</span>
+          </a>
+        </div>
+      </section>
+
+      <nav class="project-footer-nav" aria-label="Project navigation">
+        <a href="/projects/">
+          <span aria-hidden="true">←</span>
+          Back to all projects
+        </a>
+      </nav>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-page {
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+  }
+
+  .project-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  .project-breadcrumb a {
+    text-underline-offset: 0.22em;
+  }
+
+  .project-detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+    padding-block: clamp(3rem, 8vw, 7.5rem);
+  }
+
+  .project-detail-hero--without-media .project-detail-intro {
+    grid-column: 1 / -1;
+    max-width: 72rem;
+  }
+
+  .project-detail-hero--without-media .project-facts,
+  .project-detail-hero--without-media .project-tags {
+    grid-column: 1 / -1;
+  }
+
+  .project-detail-intro h1 {
+    max-width: 14ch;
+    margin-top: 0.8rem;
+    font-size: clamp(3.25rem, 8.5vw, 7.5rem);
+    letter-spacing: -0.065em;
+    line-height: 0.91;
+  }
+
+  .project-deck {
+    max-width: 48rem;
+    margin: 1.6rem 0 0;
+    color: var(--text-soft);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    line-height: 1.55;
+  }
+
+  .project-detail-intro .button-row {
+    margin-top: 2rem;
+  }
+
+  .project-hero-media {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1.2rem;
+    background: var(--surface);
+  }
+
+  .project-hero-media :global(.project-image) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+
+  .project-hero-media figcaption,
+  .project-gallery figcaption {
+    padding: 0.85rem 1rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .project-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-facts div {
+    min-width: 0;
+    padding: 1.1rem 1.1rem 1.15rem 0;
+  }
+
+  .project-facts div + div {
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .project-facts dt {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .project-facts dd {
+    margin: 0.3rem 0 0;
+    color: var(--text);
+    font-size: 0.94rem;
+    line-height: 1.45;
+  }
+
+  .project-tags {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: -1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-tags li {
+    padding: 0.42rem 0.72rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(134, 184, 255, 0.06);
+    color: var(--text-soft);
+    font-size: 0.82rem;
+  }
+
+  .project-body {
+    display: grid;
+  }
+
+  .project-detail-section {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.42fr) minmax(0, 1.58fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    padding-block: clamp(3.5rem, 8vw, 7rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .section-label h2 {
+    max-width: 15ch;
+    margin-top: 0.75rem;
+    font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+
+  .project-prose {
+    max-width: 52rem;
+  }
+
+  .project-prose p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 1.04rem;
+  }
+
+  .project-prose p + p {
+    margin-top: 1.35rem;
+  }
+
+  .project-prose .lead {
+    color: var(--text);
+    font-size: clamp(1.18rem, 2.3vw, 1.55rem);
+    line-height: 1.55;
+  }
+
+  .scope-list {
+    display: grid;
+    gap: 0.8rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .scope-list li {
+    position: relative;
+    padding: 1rem 1rem 1rem 2.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.8rem;
+    background: var(--surface);
+    color: var(--text-soft);
+  }
+
+  .scope-list li::before {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    content: "✓";
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .system-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .diagram-figure {
+    margin: 1rem 0 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1.2rem;
+    background: var(--surface);
+  }
+
+  .diagram-frame {
+    display: grid;
+    place-items: center;
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    background: #fff;
+  }
+
+  .diagram-frame :global(.project-image) {
+    width: 100%;
+    height: auto;
+    max-height: 70rem;
+    background: transparent;
+  }
+
+  .diagram-frame :global(.project-image__backdrop) {
+    display: none;
+  }
+
+  .diagram-frame :global(.project-image img) {
+    height: auto;
+    object-fit: contain;
+  }
+
+  .diagram-figure figcaption {
+    padding: 0.85rem 1rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .system-card {
+    min-height: 22rem;
+    padding: clamp(1.35rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--surface);
+  }
+
+  .system-number {
+    margin: 0 0 3rem;
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      monospace;
+    font-size: 0.8rem;
+  }
+
+  .system-card h3 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .system-card p:last-child {
+    margin: 1rem 0 0;
+    color: var(--text-soft);
+  }
+
+  .process-list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    counter-reset: process;
+    list-style: none;
+  }
+
+  .process-list li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0 0 2.25rem;
+    counter-increment: process;
+  }
+
+  .process-list li::before {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    content: counter(process, decimal-leading-zero);
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      monospace;
+    font-size: 0.75rem;
+  }
+
+  .process-list li:not(:last-child)::after {
+    position: absolute;
+    top: 3rem;
+    bottom: 0.2rem;
+    left: 1.37rem;
+    width: 1px;
+    content: "";
+    background: var(--line);
+  }
+
+  .process-list h3 {
+    margin-top: 0.15rem;
+    font-size: 1.22rem;
+  }
+
+  .process-list p {
+    margin-top: 0.55rem;
+  }
+
+  .table-wrap {
+    max-width: 100%;
+    margin-top: 2rem;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 0.9rem;
+  }
+
+  .table-wrap:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    background: var(--surface);
+  }
+
+  caption {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-soft);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    color: var(--text);
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  tbody th {
+    color: var(--text);
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .project-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .project-gallery figure {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--surface);
+  }
+
+  .project-gallery figure:first-child:nth-last-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .project-gallery :global(.project-image) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+  }
+
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .outcomes-grid article {
+    padding: clamp(1.35rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--surface);
+  }
+
+  .outcomes-grid h3 {
+    font-size: 1.18rem;
+  }
+
+  .outcomes-grid p {
+    margin: 0.8rem 0 0;
+    color: var(--text-soft);
+  }
+
+  .project-resources {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.42fr) minmax(0, 1.58fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    padding-block: clamp(3.5rem, 8vw, 7rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .project-resources h2 {
+    max-width: 14ch;
+    margin-top: 0.75rem;
+    font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+
+  .resource-list {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .resource-list a {
+    display: grid;
+    gap: 0.38rem;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid var(--line);
+    border-radius: 0.9rem;
+    background: var(--surface);
+    text-decoration: none;
+  }
+
+  .resource-list a:hover {
+    border-color: var(--line-strong);
+  }
+
+  .resource-type {
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .resource-list strong {
+    font-size: 1.05rem;
+  }
+
+  .resource-list a > span:last-child:not(.resource-type) {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .project-footer-nav {
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-footer-nav a {
+    display: inline-flex;
+    gap: 0.55rem;
+    align-items: center;
+    color: var(--text-soft);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .project-footer-nav a:hover {
+    color: var(--text);
+  }
+
+  @media (max-width: 980px) {
+    .project-detail-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .project-detail-intro,
+    .project-hero-media,
+    .project-facts,
+    .project-tags {
+      grid-column: 1;
+    }
+
+    .project-detail-intro h1 {
+      max-width: 13ch;
+    }
+
+    .project-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .project-facts div,
+    .project-facts div + div {
+      padding: 1rem 1rem 1rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-facts div:nth-child(even) {
+      padding-left: 1rem;
+      border-left: 1px solid var(--line);
+    }
+
+    .project-facts div:last-child {
+      grid-column: 1 / -1;
+      border-bottom: 0;
+    }
+
+    .system-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .system-card {
+      min-height: 0;
+    }
+
+    .system-number {
+      margin-bottom: 1.75rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .project-detail-section,
+    .project-resources {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .section-label h2,
+    .project-resources h2 {
+      max-width: 22ch;
+    }
+
+    .outcomes-grid,
+    .project-gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .project-gallery figure:first-child:nth-last-child(3) {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .project-detail-intro h1 {
+      font-size: clamp(2.8rem, 16vw, 4.5rem);
+    }
+
+    .project-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .project-facts div,
+    .project-facts div + div,
+    .project-facts div:nth-child(even) {
+      padding: 0.9rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-facts div:last-child {
+      grid-column: auto;
+    }
+
+    .process-list li {
+      grid-template-columns: 2.8rem minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .process-list li::before {
+      width: 2.3rem;
+      height: 2.3rem;
+    }
+
+    .process-list li:not(:last-child)::after {
+      top: 2.5rem;
+      left: 1.12rem;
+    }
+  }
+
+  @media print {
+    .project-breadcrumb,
+    .project-detail-intro .button-row,
+    .project-footer-nav {
+      display: none;
+    }
+
+    .project-detail-hero,
+    .project-detail-section,
+    .project-resources {
+      display: block;
+      padding-block: 1.5rem;
+    }
+
+    .project-facts {
+      display: block;
+    }
+
+    .project-facts div,
+    .project-facts div + div {
+      border: 0;
+    }
+
+    .system-grid,
+    .outcomes-grid,
+    .project-gallery {
+      display: block;
+    }
+
+    .system-card,
+    .outcomes-grid article,
+    .project-gallery figure,
+    .resource-list a {
+      margin-bottom: 1rem;
+      break-inside: avoid;
+      background: transparent;
+    }
+  }
+</style>
