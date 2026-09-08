@@ -262,6 +262,20 @@ h3 {
   color: var(--text-muted);
 }
 
+.role-line a {
+  color: var(--text-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 0.22em;
+  transition: color 0.18s ease, text-decoration-color 0.18s ease;
+}
+
+.role-line a:hover,
+.role-line a:focus-visible {
+  color: var(--accent-strong);
+  text-decoration-color: currentColor;
+}
+
 .hero-portrait {
   padding: 1.5rem;
   border: 1px solid var(--line);
