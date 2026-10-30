@@ -9,10 +9,14 @@ interface Props {
 const { project } = Astro.props;
 
 const DETAIL_PAGE_SLUGS = [
+  "spacedome",
   "idavie",
   "laser-alignment-telescope",
   "digital-planetarium-learning",
 ];
+
+const hasDetailPage = DETAIL_PAGE_SLUGS.includes(project.slug);
+const detailHref = `/projects/${project.slug}/`;
 ---
 
 <article class="project-card" id={project.slug}>
@@ -36,7 +40,17 @@ const DETAIL_PAGE_SLUGS = [
 
     <p class="project-role">{project.role}</p>
 
-    <h3>{project.title}</h3>
+    <h3>
+      {
+        hasDetailPage ? (
+          <a class="project-title-link" href={detailHref}>
+            {project.title}
+          </a>
+        ) : (
+          project.title
+        )
+      }
+    </h3>
     <p class="project-summary">{project.summary}</p>
 
     <ul class="tag-list" aria-label={`${project.title} topics`}>
@@ -51,10 +65,10 @@ const DETAIL_PAGE_SLUGS = [
     </details>
 
     {
-      DETAIL_PAGE_SLUGS.includes(project.slug) && (
+      hasDetailPage && (
         <a
           class="text-link"
-          href={`/projects/${project.slug}/`}
+          href={detailHref}
           aria-label={`Read the full ${project.title} project page`}
         >
           View full project

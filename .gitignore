@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # personal CV source (contains contact details)
 CV-current.md
+
+# SpaceDome source deliverables (SpaceDome material, not for publication)
+spacedome_resources/

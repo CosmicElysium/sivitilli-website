@@ -249,6 +249,13 @@ export const projects: Project[] = [
         description:
           "The competitive ESA call under which SpaceDome was awarded.",
       },
+      {
+        label: "iDaVIE on GitHub",
+        type: "Source code",
+        href: IDAVIE_REPO,
+        description:
+          "The open-source immersive visualisation platform whose engine SpaceDome builds on.",
+      },
     ],
   },
   {
